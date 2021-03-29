@@ -3,7 +3,6 @@ library phd_core;
 export 'package:dio/dio.dart';
 export 'package:sqflite/sqflite.dart';
 export 'package:device_info/device_info.dart';
-export 'package:shared_preferences/shared_preferences.dart';
 export 'package:rxdart/rxdart.dart';
 export 'package:get_it/get_it.dart';
 export 'package:uuid/uuid.dart';

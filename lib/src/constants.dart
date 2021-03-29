@@ -22,8 +22,6 @@ class Constants {
 class PreferenceKey {
   PreferenceKey._();
 
-  static const theme = 'my_theme';
-  static const language = 'app_language';
   static const refreshToken = 'refresh_token';
   static const accessToken = 'access_token';
   static const expiresIn = 'expires_in';

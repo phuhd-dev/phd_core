@@ -19,8 +19,8 @@ class LoadingWidget extends StatelessWidget {
         Center(
           child: SpinKitRing(
             color: Theme.of(context).primaryColor,
-            size: 50,
-            lineWidth: 4,
+            size: 24,
+            lineWidth: 2,
           ),
         ),
         if (titleKeyStr?.isNotEmpty == true) ...[

@@ -39,8 +39,8 @@ class LoadingDialog extends StatelessWidget {
         child: Center(
           child: SpinKitRing(
             color: Theme.of(context).primaryColor,
-            size: 50,
-            lineWidth: 4,
+            size: 24,
+            lineWidth: 2,
           ),
         ),
       ),

@@ -27,6 +27,10 @@ abstract class BaseBloc<T extends dynamic> {
 
   T get state => _controller?.value;
 
+  bool get waitingValue => _waitingController?.value;
+  
+  bool get loadingValue => _loadingController?.value;
+
   @mustCallSuper
   void dispose() {
     loading?.close();

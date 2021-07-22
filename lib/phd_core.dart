@@ -6,7 +6,6 @@ export 'package:device_info/device_info.dart';
 export 'package:rxdart/rxdart.dart';
 export 'package:get_it/get_it.dart';
 export 'package:uuid/uuid.dart';
-export 'package:global_configuration/global_configuration.dart';
 export 'package:path_provider/path_provider.dart';
 export 'package:intl/intl.dart';
 export 'package:flutter_spinkit/flutter_spinkit.dart';

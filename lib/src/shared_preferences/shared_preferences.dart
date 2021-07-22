@@ -17,11 +17,17 @@ class SharedPreferences extends BasePreference {
 
   Future setAccessToken(String accessToken) async => await setSecureValue(PreferenceKey.accessToken, accessToken);
 
+  Future clearAccessToken() async => await remove(PreferenceKey.accessToken, isSecure: true);
+
   Future<String> get refreshToken async => await getValue(PreferenceKey.refreshToken, isSecure: true);
 
   Future setRefreshToken(String refreshToken) async => await setSecureValue(PreferenceKey.refreshToken, refreshToken);
 
+  Future clearRefreshToken() async => await remove(PreferenceKey.refreshToken, isSecure: true);
+
   Future<String> get expiresIn async => await getValue(PreferenceKey.expiresIn, isSecure: true);
 
   Future setExpiresIn(String expiresIn) async => await setSecureValue(PreferenceKey.expiresIn, expiresIn);
+
+  Future clearExpiresIn() async => await remove(PreferenceKey.expiresIn, isSecure: true);
 }

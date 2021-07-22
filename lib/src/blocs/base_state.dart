@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../localizations/localizations.dart';
@@ -18,24 +17,14 @@ abstract class BaseState<T extends StatefulWidget, B extends BaseBloc> extends S
 
   bool _isDispose = false;
 
-  void onNavigateAsync(Object payload) {}
-
-  void loadData() {}
-
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
 
-    bloc?.waitingStream?.listen((loading) {
-      if (loading) {
-        LoadingDialog.show(context);
-      } else {
-        LoadingDialog.close(context);
-      }
-    });
-
-    bloc?.listenerStream?.listen((state) => blocListener(state));
+    bloc?.waitingStream?.listen(_waitingListener);
+    bloc?.listenerStream?.listen(blocListener);
+    bloc?.restStatusCodeStream?.listen(_statusCodeListener);
   }
 
   @override
@@ -71,14 +60,10 @@ abstract class BaseState<T extends StatefulWidget, B extends BaseBloc> extends S
     return isContentLayout == true
         ? _body
         : GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
+            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
             child: Scaffold(
               appBar: buildAppBar(context),
-              body: SafeArea(
-                child: _body,
-              ),
+              body: SafeArea(child: _body),
               drawer: buildDrawer(context),
               floatingActionButton: buildFloatButton(context),
             ),
@@ -95,7 +80,44 @@ abstract class BaseState<T extends StatefulWidget, B extends BaseBloc> extends S
 
   Widget buildFloatButton(BuildContext context) => null;
 
+  void onNavigateAsync(Object payload) {}
+
+  void loadData() {}
+
+  void _waitingListener(bool loading) {
+    if (loading) {
+      LoadingDialog.show(context);
+    } else {
+      LoadingDialog.close(context);
+    }
+  }
+
   void blocListener(dynamic state) {}
+
+  void onUnauthorizedException() {}
+
+  void onForbiddenException() {}
+
+  void onNotFoundException() {}
+
+  void onOtherStatusCodeException(int statusCode) {}
+
+  void _statusCodeListener(int statusCode) {
+    switch (statusCode) {
+      case 401:
+        onUnauthorizedException();
+        break;
+      case 403:
+        onForbiddenException();
+        break;
+      case 404:
+        onNotFoundException();
+        break;
+      default:
+        onOtherStatusCodeException(statusCode);
+        break;
+    }
+  }
 
   @override
   void dispose() {

@@ -10,12 +10,15 @@ abstract class BaseBloc<T extends dynamic> {
   final BehaviorSubject<dynamic> _listenerController = BehaviorSubject<dynamic>();
   final BehaviorSubject<bool> _loadingController = BehaviorSubject<bool>.seeded(false);
   final BehaviorSubject<bool> _waitingController = BehaviorSubject<bool>.seeded(false);
+  final BehaviorSubject<int> _restStatusCodeController = BehaviorSubject<int>();
 
   Stream<bool> get loadingStream => _loadingController?.stream;
 
   Stream<bool> get waitingStream => _waitingController?.stream;
 
   Stream<T> get stateStream => _controller?.stream;
+
+  Stream<int> get restStatusCodeStream => _restStatusCodeController?.stream;
 
   Stream<dynamic> get listenerStream => _listenerController?.stream;
 
@@ -28,7 +31,7 @@ abstract class BaseBloc<T extends dynamic> {
   T get state => _controller?.value;
 
   bool get waitingValue => _waitingController?.value;
-  
+
   bool get loadingValue => _loadingController?.value;
 
   @mustCallSuper
@@ -41,6 +44,7 @@ abstract class BaseBloc<T extends dynamic> {
     _listenerController?.close();
     _loadingController?.close();
     _waitingController?.close();
+    _restStatusCodeController?.close();
   }
 
   @mustCallSuper
@@ -56,4 +60,11 @@ abstract class BaseBloc<T extends dynamic> {
   void onInactive() {}
 
   void emit(dynamic state) => _controller?.sink?.add(state);
+
+  void addError(Object error, [StackTrace stackTrace]) {
+    if (_controller?.isClosed ?? true) return;
+    _controller?.sink?.addError(error, stackTrace);
+  }
+
+  void emitStatusCode(int statusCode) => _restStatusCodeController?.sink?.add(statusCode);
 }

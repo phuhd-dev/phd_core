@@ -26,9 +26,9 @@ class DeviceInfo {
 
   static Future<String> get deviceUuid async => await _getDeviceUUID();
 
-  static Future<bool> get isPhysicalDevice async => await _isPhysicalDevice();
+  static Future<bool?> get isPhysicalDevice => _isPhysicalDevice();
 
-  static Future<Map<String, dynamic>> get deviceInfo async => await _getDeviceInfo();
+  static Future<Map<String, dynamic>?> get deviceInfo => _getDeviceInfo();
 
   static Future<String> _getDeviceUUID() async {
     var identifier;
@@ -45,7 +45,7 @@ class DeviceInfo {
     return identifier;
   }
 
-  static Future<bool> _isPhysicalDevice() async {
+  static Future<bool?> _isPhysicalDevice() async {
     try {
       if (isAndroid) {
         final androidInfo = await deviceInfoPlugin.androidInfo;
@@ -59,9 +59,9 @@ class DeviceInfo {
     }
   }
 
-  static Future<Map<String, dynamic>> _getDeviceInfo() async {
+  static Future<Map<String, dynamic>?> _getDeviceInfo() async {
     try {
-      Map<String, dynamic> result;
+      Map<String, dynamic>? result;
       if (isAndroid) {
         final androidDeviceInfo = await deviceInfoPlugin.androidInfo;
         result = {

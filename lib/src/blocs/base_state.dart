@@ -6,39 +6,40 @@ import 'blocs.dart';
 
 abstract class BaseState<T extends StatefulWidget, B extends BaseBloc> extends State<T> with WidgetsBindingObserver {
   final spinKitSize = 20.0;
+  var _isFirstInit = true;
 
-  B get bloc;
+  B? get bloc;
 
-  AppLocalizations localizations;
+  AppLocalizations? localizations;
 
   bool get isContentLayout => false;
 
-  bool isFirstInit = true;
+  bool get isFirstInit => _isFirstInit;
 
   bool _isDispose = false;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
     super.initState();
 
-    bloc?.waitingStream?.listen(_waitingListener);
-    bloc?.listenerStream?.listen(blocListener);
-    bloc?.restStatusCodeStream?.listen(_statusCodeListener);
+    bloc?.waitingStream.listen(_waitingListener);
+    bloc?.listenerStream.listen(blocListener);
+    bloc?.restStatusCodeStream.listen(_statusCodeListener);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    localizations ??= AppLocalizations.of(context);
+    localizations = AppLocalizations.of(context);
     if (isFirstInit) {
       if (mounted) {
-        final args = ModalRoute.of(context)?.settings?.arguments;
+        final args = ModalRoute.of(context)?.settings.arguments;
         onNavigateAsync(args);
       }
 
       loadData();
-      isFirstInit = false;
+      _isFirstInit = false;
     }
   }
 
@@ -47,9 +48,9 @@ abstract class BaseState<T extends StatefulWidget, B extends BaseBloc> extends S
     Widget _body;
     _body = (bloc != null)
         ? StreamBuilder<bool>(
-            stream: bloc.loadingStream,
+            stream: bloc?.loadingStream,
             builder: (context, snapShot) {
-              if (snapShot?.data == true) {
+              if (snapShot.data == true) {
                 return buildLoading(context);
               }
               return buildContent(context);
@@ -72,15 +73,15 @@ abstract class BaseState<T extends StatefulWidget, B extends BaseBloc> extends S
 
   Widget buildContent(BuildContext context) => Container();
 
-  Widget buildAppBar(BuildContext context) => null;
+  PreferredSizeWidget? buildAppBar(BuildContext context) => null;
 
   Widget buildLoading(BuildContext context) => LoadingWidget();
 
-  Widget buildDrawer(BuildContext context) => null;
+  Widget? buildDrawer(BuildContext context) => null;
 
-  Widget buildFloatButton(BuildContext context) => null;
+  Widget? buildFloatButton(BuildContext context) => null;
 
-  void onNavigateAsync(Object payload) {}
+  void onNavigateAsync([Object? payload]) {}
 
   void loadData() {}
 
@@ -123,7 +124,7 @@ abstract class BaseState<T extends StatefulWidget, B extends BaseBloc> extends S
   void dispose() {
     Log.d('$widget onDispose');
     bloc?.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     _isDispose = true;
     super.dispose();
   }

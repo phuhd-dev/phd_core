@@ -4,36 +4,45 @@ import 'package:flutter/material.dart';
 import '../utilities/utilities.dart';
 import '../constants.dart';
 
-extension StringExtension on String {
+extension StringExtension on String? {
   static RegExp _replaceArgRegex = RegExp(r'{}');
 
-  bool get isNullOrEmpty => this == null || this.isEmpty;
+  bool get isNullOrEmpty => this?.isEmpty ?? true;
 
   bool get isNotNullOrEmpty => !isNullOrEmpty;
 
-  bool get isNullOrWhiteSpace => this.isNullOrEmpty || this.trim().isEmpty;
+  bool get isNullOrWhiteSpace => this.isNullOrEmpty || (this?.trim() ?? '').isEmpty;
 
-  String get titleCase => StringUtils(this).titleCase;
+  String? get titleCase => this == null ? null : StringUtils(this).titleCase;
 
-  String get markFormat => '${Constants.mark}$this'.trim();
+  String? get markFormat => this == null ? null : '${Constants.mark}$this'.trim();
 
-  String get markStarFormat => '${Constants.markStar} $this'.trim();
+  String? get markStarFormat => this == null ? null : '${Constants.markStar} $this'.trim();
 
-  String get plusFormat => '${Constants.plus} $this'.trim();
+  String? get plusFormat => this == null ? null : '${Constants.plus} $this'.trim();
 
-  String get mulFormat => '${Constants.mul}$this'.trim();
+  String? get mulFormat => this == null ? null : '${Constants.mul}$this'.trim();
 
-  String get colonFormat => '${this}${Constants.colon}'.trim();
+  String? get colonFormat => this == null ? null : '${this}${Constants.colon}'.trim();
 
-  Color get toColorFromHex {
+  Color? get toColorFromHex {
+    if (this == null) return null;
+
+    final _length = this?.length ?? 0;
     final buffer = StringBuffer();
-    if (length == 6 || length == 7) buffer.write('ff');
-    buffer.write(replaceFirst('#', ''));
-    return Color(int.parse(buffer.toString(), radix: 16));
+    if (_length == 6 || _length == 7) buffer.write('ff');
+    buffer.write(this?.replaceFirst('#', ''));
+
+    final colorInt = int.tryParse(buffer.toString(), radix: 16);
+    if (colorInt == null) return null;
+
+    return Color(colorInt);
   }
 
-  String get unSign {
-    String result = this ?? '';
+  String? get unSign {
+    if (this == null) return null;
+
+    var result = this ?? '';
     if (result is String) {
       for (int i = 0; i < _vietnamese.length; i++) {
         result = result.replaceAll(_vietnameseRegex[i], _vietnamese[i]);
@@ -42,27 +51,25 @@ extension StringExtension on String {
     return result;
   }
 
-  String get unSignLower => this.unSign.toUpperCase();
+  String? get unSignLower => this.unSign?.toUpperCase();
 
-  String hyphenFormat(String str) => '$this ${Constants.hyphen} $str'.trim();
+  String? hyphenFormat(String str) => this == null ? null : '$this ${Constants.hyphen} $str'.trim();
 
-  String closureFormat(String str) => '$this ($str)'.trim();
+  String? closureFormat(String str) => this == null ? null : '$this ($str)'.trim();
 
-  String underlineFormat(String str) => '${this}${Constants.underline}$str'.trim();
+  String? underlineFormat(String str) => this == null ? null : '${this}${Constants.underline}$str'.trim();
 
-  int toInt({int defaultValue = 0}) => int.tryParse(this) ?? defaultValue;
+  int? toInt({int defaultValue = 0}) => this == null ? null : (int.tryParse('$this') ?? defaultValue);
 
-  double toDouble({double defaultValue = 0.0}) => double.tryParse(this) ?? defaultValue;
+  double? toDouble({double defaultValue = 0.0}) => this == null ? null : (double.tryParse('$this') ?? defaultValue);
 
-  bool toBool() => this.trim().toLowerCase() == 'true' || this.trim().toLowerCase() == '1';
+  bool? toBool() => this == null ? null : (this?.trim().toLowerCase() == 'true' || this?.trim().toLowerCase() == '1');
 
-  String arguments(List<dynamic> args) {
-    if (args == null || args.isEmpty || this == null) return this;
+  String? arguments(List<dynamic> args) {
+    if (args.isEmpty || this == null) return this;
 
-    String res = this;
-
+    var res = this ?? '';
     args.forEach((value) => res = res.replaceFirst(_replaceArgRegex, '$value'));
-
     return res;
   }
 }
@@ -87,21 +94,21 @@ final List<RegExp> _vietnameseRegex = <RegExp>[
 
 class StringUtils {
   static const TAG = 'StringExtension';
-  List<String> _words;
+  final _words = <String>[];
 
-  StringUtils(String text) {
-    _words = _groupIntoWords(text);
+  StringUtils([String? text]) {
+    _words.addAll(_groupIntoWords(text));
   }
 
-  List<String> _groupIntoWords(String text) {
-    if (text.isNullOrWhiteSpace) return null;
-    return text.split(' ');
+  List<String> _groupIntoWords([String? text]) {
+    if (text.isNullOrWhiteSpace) return [];
+    return text?.split(' ') ?? [];
   }
 
   String get titleCase => _getTitleCase(separator: ' ');
 
   String _getTitleCase({String separator: ''}) {
-    if (this._words == null) return '';
+    if (this._words.isEmpty) return '';
     final words = this._words.map(_upperCaseFirstLetter).toList();
     return words.join(separator);
   }
@@ -113,7 +120,7 @@ class StringUtils {
       result = '${word.substring(0, 1).toUpperCase()}${word.substring(1).toLowerCase()}';
     } catch (e) {
       Log.e(word, tag: TAG);
-      Log.e(e, tag: TAG);
+      Log.e('${e.toString()}', tag: TAG);
     }
     return result;
   }

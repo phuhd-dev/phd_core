@@ -5,9 +5,6 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
 
   @override
   DateTime fromJson(String json) {
-    if (json == null || json.isEmpty) {
-      return null;
-    }
     if (json.contains(".") && json[json.length - 2] == '.') {
       json = json.substring(0, json.length - 1);
     }
@@ -15,7 +12,7 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
   }
 
   @override
-  String toJson(DateTime json) => json?.toIso8601String();
+  String toJson(DateTime json) => json.toIso8601String();
 }
 
 class BooleanConverter implements JsonConverter<bool, int> {
@@ -23,12 +20,15 @@ class BooleanConverter implements JsonConverter<bool, int> {
 
   @override
   bool fromJson(dynamic json) {
-    if (json is bool)
+    if (json is bool) {
       return json;
-    else if (json is int)
-      return json == 0 || json == null ? false : true;
-    else
-      return false;
+    }
+
+    if (json is int) {
+      return json == 1;
+    }
+
+    return false;
   }
 
   @override

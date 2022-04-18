@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class LoadingDialog extends StatelessWidget {
   static bool isOpen = false;
 
-  static Future show(BuildContext context, {Function method}) async {
+  static Future show(BuildContext context, {Function()? method}) async {
     if (isOpen) {
       close(context);
       return;

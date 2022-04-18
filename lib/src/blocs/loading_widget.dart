@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../localizations/localizations.dart';
 
 class LoadingWidget extends StatelessWidget {
-  final String titleKeyStr;
+  final String? titleKeyStr;
 
   LoadingWidget({this.titleKeyStr});
 
@@ -27,7 +27,7 @@ class LoadingWidget extends StatelessWidget {
           const SizedBox(),
           Center(
             child: Text(
-              titleKeyStr.isNotEmpty ? localizations.text(titleKeyStr) : '',
+              (titleKeyStr?.isNotEmpty ?? false) ? (localizations?.text('$titleKeyStr') ?? '') : '',
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),

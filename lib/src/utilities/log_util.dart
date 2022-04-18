@@ -14,17 +14,17 @@ class LogUtil {
     _maxLen = maxLen;
   }
 
-  static void e(Object object, {String tag}) {
-    _printLog(tag, ' error', object);
+  static void e(Object object, {String? tag}) {
+    _printLog(tag: tag, stag: ' error', object: object);
   }
 
-  static void d(Object object, {String tag}) {
+  static void d(Object object, {String? tag}) {
     if (_debugMode) {
-      _printLog(tag, ' debug', object);
+      _printLog(tag: tag, stag: ' debug', object: object);
     }
   }
 
-  static void _printLog(String tag, String stag, Object object) {
+  static void _printLog({String? tag, String? stag, Object? object}) {
     String da = object.toString();
     tag = tag ?? _tagValue;
     if (da.length <= _maxLen) {

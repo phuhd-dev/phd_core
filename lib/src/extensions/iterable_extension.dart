@@ -1,9 +1,9 @@
 extension IterableExtension<E> on Iterable<E> {
-  bool get isNullOrEmpty => this == null || this.isEmpty;
+  bool get isNullOrEmpty => this.isEmpty;
 
   bool get isNotNullOrEmpty => !isNullOrEmpty;
 
-  E firstOrDefault([bool func(E element)]) {
+  E? firstOrDefault([bool Function(E element)? func]) {
     if (func == null) {
       Iterator<E> it = iterator;
       if (!it.moveNext()) {
@@ -17,12 +17,12 @@ extension IterableExtension<E> on Iterable<E> {
     return null;
   }
 
-  E lastOrDefault([bool func(E element)]) {
+  E? lastOrDefault([bool Function(E element)? func]) {
     if (func == null) {
       if (this.isNotNullOrEmpty) return this.last;
       return null;
     }
-    E result;
+    E? result;
     bool foundMatching = false;
     for (E element in this) {
       if (func(element)) {

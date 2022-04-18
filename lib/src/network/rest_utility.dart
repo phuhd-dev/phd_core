@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../utilities/utilities.dart';
 
@@ -14,10 +15,10 @@ abstract class IRestUtility {
 }
 
 class RestUtility implements IRestUtility {
-  Dio _dio;
+  late Dio _dio;
 
   final String baseUrl;
-  final List<Interceptor> interceptors;
+  final List<Interceptor>? interceptors;
   final ResponseType responseType;
 
   RestUtility(
@@ -42,7 +43,7 @@ class RestUtility implements IRestUtility {
     _dio = Dio(_options);
 
     if (interceptors != null) {
-      _dio.interceptors.addAll(interceptors);
+      _dio.interceptors.addAll(interceptors ?? []);
     }
   }
 
@@ -50,9 +51,9 @@ class RestUtility implements IRestUtility {
     String method,
     String url, {
     dynamic data,
-    Map<String, dynamic> queryParameters,
-    CancelToken cancelToken,
-    Options options,
+    Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
+    Options? options,
   }) async {
     options ??= Options(headers: {});
     options.method = method;
@@ -77,12 +78,12 @@ class RestUtility implements IRestUtility {
     Method method,
     String url, {
     data,
-    Map<String, dynamic> queryParameters,
-    CancelToken cancelToken,
-    Options options,
+    Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
+    Options? options,
   }) async {
     return await _createRequest(
-      method.value ?? Method.POST.value,
+      method.value,
       url,
       data: data,
       options: options,
@@ -95,5 +96,5 @@ class RestUtility implements IRestUtility {
 enum Method { POST, PUT, DELETE, GET }
 
 extension MethodExtensions on Method {
-  String get value => ['POST', 'PUT', 'DELETE', 'GET'][index];
+  String get value => describeEnum(this);
 }

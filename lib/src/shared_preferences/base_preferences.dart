@@ -2,11 +2,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 abstract class BasePreference {
-  FlutterSecureStorage _secureStorage;
-  AndroidOptions _androidOptions;
-  IOSOptions _iosOptions;
+  late FlutterSecureStorage _secureStorage;
+  AndroidOptions? _androidOptions;
+  IOSOptions? _iosOptions;
 
-  BasePreference({AndroidOptions androidOptions, IOSOptions iosOptions}) {
+  BasePreference({AndroidOptions? androidOptions, IOSOptions? iosOptions}) {
     _secureStorage = FlutterSecureStorage();
     _androidOptions = androidOptions;
     _iosOptions = iosOptions;

@@ -4,28 +4,24 @@ extension DateTimeExtension on DateTime {
   DateTime get date => DateTime(this.year, this.month, this.day);
 
   bool operator >=(DateTime other) {
-    if (this == null || other == null) return false;
     var now = this.toUtc().millisecondsSinceEpoch;
     var otherUtc = other.toUtc().millisecondsSinceEpoch;
     return now >= otherUtc;
   }
 
   bool operator >(DateTime other) {
-    if (this == null || other == null) return false;
     var now = this.toUtc().millisecondsSinceEpoch;
     var otherUtc = other.toUtc().millisecondsSinceEpoch;
     return now > otherUtc;
   }
 
   bool operator <=(DateTime other) {
-    if (this == null || other == null) return false;
     var now = this.toUtc().millisecondsSinceEpoch;
     var otherUtc = other.toUtc().millisecondsSinceEpoch;
     return now <= otherUtc;
   }
 
   bool operator <(DateTime other) {
-    if (this == null || other == null) return false;
     var now = this.toUtc().millisecondsSinceEpoch;
     var otherUtc = other.toUtc().millisecondsSinceEpoch;
     return now < otherUtc;
@@ -45,8 +41,6 @@ extension DateTimeExtension on DateTime {
   }
 
   bool isSameDay(DateTime other) {
-    if (this == null || other == null) return false;
-
     return this.year == other.year && this.month == other.month && this.day == other.day;
   }
 }

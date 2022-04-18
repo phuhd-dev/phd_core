@@ -4,7 +4,7 @@ import 'base_preferences.dart';
 import '../constants.dart';
 
 class SharedPreferences extends BasePreference {
-  SharedPreferences({String groupId, String accountName})
+  SharedPreferences({String? groupId, String? accountName})
       : super(
           androidOptions: AndroidOptions(),
           iosOptions: IOSOptions(
